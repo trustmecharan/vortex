@@ -51,15 +51,22 @@ done
     fi
 
     # generic synthesis
-    echo "synth -top $top_level"
+    # echo "synth -top $top_level"
 
-    # mapping to mycells.lib
-    echo "dfflibmap -liberty mycells.lib"
-    echo "abc -liberty mycells.lib"
-    echo "clean"
+    # # mapping to mycells.lib
+    # echo "dfflibmap -liberty abc.lib"
+    # echo "abc -liberty abc.lib"
+    # echo "clean"
 
-    # write synthesized design
-    echo "write_verilog synth.v"
+    # # write synthesized design
+    # echo "write_firrtl synth.v"
+
+    echo "prep -flatten -top Vortex"
+    echo "async2sync" # NEW
+    echo "proc_init"
+    echo "proc_mux"
+    echo "memory"
+    echo "write_firrtl Vortex.fir"
 } > synth.ys
 
 yosys -l yosys.log synth.ys

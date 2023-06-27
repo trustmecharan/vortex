@@ -1,0 +1,7 @@
+read_verilog   -sv output.v
+prep -flatten -top Vortex
+async2sync
+proc_init
+proc_mux
+memory
+write_firrtl Vortex.fir

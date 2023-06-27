@@ -410,7 +410,82 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 
-`include "VX_fpu_types.vh"
-`include "VX_gpu_types.vh"
+// `include "VX_fpu_types.vh"
+// `include "VX_gpu_types.vh"
+`ifndef VX_GPU_TYPES
+`define VX_GPU_TYPES
 
+// `include "VX_define.vh"
+
+package gpu_types;
+
+typedef struct packed {
+    logic                    valid;
+    logic [`NUM_THREADS-1:0] tmask;
+} gpu_tmc_t;
+
+`define GPU_TMC_BITS $bits(gpu_types::gpu_tmc_t)
+
+typedef struct packed {
+    logic                   valid;
+    logic [`NUM_WARPS-1:0]  wmask;
+    logic [31:0]            pc;
+} gpu_wspawn_t;
+
+`define GPU_WSPAWN_BITS $bits(gpu_types::gpu_wspawn_t)
+
+typedef struct packed {
+    logic                   valid;
+    logic                   diverged;
+    logic [`NUM_THREADS-1:0] then_tmask;
+    logic [`NUM_THREADS-1:0] else_tmask;
+    logic [31:0]            pc;
+} gpu_split_t;
+
+`define GPU_SPLIT_BITS $bits(gpu_types::gpu_split_t)
+
+typedef struct packed {
+    logic                   valid;
+    logic [`NB_BITS-1:0]    id;
+    logic [`NW_BITS-1:0]    size_m1;
+} gpu_barrier_t;
+
+`define GPU_BARRIER_BITS $bits(gpu_types::gpu_barrier_t)
+
+endpackage
+
+`endif
+
+`ifndef VX_FPU_TYPES
+`define VX_FPU_TYPES
+
+// `include "VX_define.vh"
+
+package fpu_types;
+
+typedef struct packed {
+    logic is_normal;
+    logic is_zero;
+    logic is_subnormal;
+    logic is_inf;
+    logic is_nan;
+    logic is_quiet;
+    logic is_signaling;    
+} fp_class_t;
+
+`define FP_CLASS_BITS  $bits(fpu_types::fp_class_t)
+
+typedef struct packed {
+    logic NV; // 4-Invalid
+    logic DZ; // 3-Divide by zero
+    logic OF; // 2-Overflow
+    logic UF; // 1-Underflow
+    logic NX; // 0-Inexact
+} fflags_t;
+
+`define FFLAGS_BITS  $bits(fpu_types::fflags_t)
+
+endpackage
+
+`endif
 `endif
